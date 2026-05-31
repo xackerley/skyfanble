@@ -1,0 +1,107 @@
+esphome:
+  name: skyfanble
+  friendly_name: SkyfanBLE
+  name_add_mac_suffix: true
+
+esp32:
+  board: esp32-c3-devkitm-1
+  framework:
+    type: esp-idf
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+- platform: esphome
+  password: ''
+
+wifi:
+  # WiFi credentials (replace with your own)
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    password: '12345678'
+
+captive_portal:
+
+uart:
+  # UART connection to Tuya MCU
+  rx_pin: GPIO20
+  tx_pin: GPIO21
+  baud_rate: 9600
+
+sensor:
+  - platform: wifi_signal
+    name: "WiFi Signal"
+    update_interval: 60s
+    disabled_by_default: true
+
+tuya:
+  id: tuyamcu # Tuya MCU on UART
+
+light:
+  - platform: tuya
+    name: "Light"
+    switch_datapoint: 15
+    dimmer_datapoint: 16
+    min_value: 0
+    max_value: 5
+    restore_mode: RESTORE_DEFAULT_OFF
+    disabled_by_default: false
+
+fan:
+  - platform: tuya
+    name: "Ceiling Fan"
+    switch_datapoint: 1       # Fan on/off
+    speed_datapoint: 3        # Speed (1–6)
+    direction_datapoint: 8    # Forward / Reverse
+    speed_count: 6
+    restore_mode: RESTORE_DEFAULT_OFF
+    disabled_by_default: false
+
+select:
+  - id: fan_mode
+    platform: tuya
+    tuya_id: tuyamcu
+    name: "Fan Mode"
+    enum_datapoint: 2
+    options:
+      0: Normal
+      1: Eco
+      2: Sleep
+    disabled_by_default: true
+  
+  - id: fan_timer
+    platform: tuya
+    tuya_id: tuyamcu
+    name: "Fan Timer"
+    enum_datapoint: 22
+    options:
+      0: Inactive
+      1: 1 hour
+      2: 2 hours
+      3: 3 hours
+      4: 4 hours
+      5: 5 hours
+      6: 6 hours
+      7: 7 hours
+      8: 8 hours
+      9: 9 hours
+      10: 10 hours
+      11: 11 hours
+      12: 12 hours
+    disabled_by_default: true
+
+  - platform: tuya
+    name: "Light Colour Temperature"
+    enum_datapoint: 19
+    options:
+      0: Cool White
+      1: Natural White
+      2: Warm White
+    disabled_by_default: false
