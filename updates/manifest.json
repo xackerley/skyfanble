@@ -5,7 +5,7 @@
     {
       "chipFamily": "ESP32-C3",
       "ota": {
-        "md5": "db6ac9e04d9cee8d5fd4f51c9cd8afd2",
+        "md5": "b930baff4391b8045d774e8e9c73bebf",
         "path": "skyfanble.ota.v1.0.1.bin",
         "release_url": "https://github.com/xackerley/SkyfanBLE",
         "summary": "Placeholder until first release"
